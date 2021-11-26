@@ -60,9 +60,9 @@ void fit(NeuralNetwork* network, double** inputs, int numInputs, double** expect
       Layer currentLayer = network->allLayers[c];
       adjustmentMatrices[c] = (double**) malloc(currentLayer.numRows * sizeof(double*));
       for(int d = 0; d < currentLayer.numRows; d++) {
-        adjustmentMatrices[c][d] = (double*) malloc(currentLayer.numCols * sizeof(double));
+        adjustmentMatrices[c][d] = (double*) calloc(currentLayer.numCols, sizeof(double));
       }
-      biasAdjustmentMatrix[c] = (double*) malloc(currentLayer.numRows * sizeof(double));
+      biasAdjustmentMatrix[c] = (double*) calloc(currentLayer.numRows, sizeof(double));
     }
     for(int b = 0; b < numInputs; b++) {
       double* currentInput = inputs[b];
@@ -82,7 +82,7 @@ void fit(NeuralNetwork* network, double** inputs, int numInputs, double** expect
         prev = applyNonLinearFunction(currentRawOutput, currentLayer.numRows);
       }
       double* predictedOutput = prev;
-      derivatives[network->layerCount - 1] = (double*) malloc(network->allLayers[network->layerCount - 1].numRows * sizeof(double));
+      derivatives[network->layerCount - 1] = (double*) calloc(network->allLayers[network->layerCount - 1].numRows, sizeof(double));
       Layer lastLayer = network->allLayers[network->layerCount - 1];
       for(int c = 0; c < network->allLayers[network->layerCount - 1].numRows; c++) {
         derivatives[network->layerCount - 1][c] = dCostByDRaw(expectedOutputs[b][c], allRawOutputs[network->layerCount - 1][c]);
@@ -116,7 +116,7 @@ void fit(NeuralNetwork* network, double** inputs, int numInputs, double** expect
           currentBiasAdjustments[d] = currentBiasAdjustments[d] + currentDerivatives[d];
         }
         if(previousLayer != NULL) {
-          derivatives[c - 1] = (double*) malloc(currentLayer.numCols * sizeof(double));
+          derivatives[c - 1] = (double*) calloc(currentLayer.numCols, sizeof(double));
           double* previousDerivatives = derivatives[c - 1];
           previousRawValues = allRawOutputs[c - 1];
           for(int d = 0; d < previousLayer->numRows; d++) {
