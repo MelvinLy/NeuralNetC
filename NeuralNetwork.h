@@ -151,7 +151,7 @@ void fit(NeuralNetwork* network, double** inputs, int numInputs, double** expect
       }
     }
     for(int z = 0; z < network->layerCount; z++) {
-      for(int y = 0; y < network->allLayers[network->layerCount].numCols; y++) {
+      for(int y = 0; y < network->allLayers[z].numRows; y++) {
         free(adjustmentMatrices[z][y]);
       }
       free(adjustmentMatrices[z]);
